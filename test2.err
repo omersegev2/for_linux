@@ -1,3 +1,8 @@
+==28432== Memcheck, a memory error detector
+==28432== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==28432== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==28432== Command: ./test2
+==28432== 
  ***** Error: RDB_INVALID_YEAR *****
  ***** Error: RDB_INVALID_YEAR *****
  ***** Error: RDB_INVALID_TRACK_LENGTH *****
@@ -12,3 +17,11 @@
  ***** Error: RDB_NO_RECORDS *****
  ***** Error: RDB_NO_RECORDS *****
  ***** Error: RDB_NO_RECORDS *****
+==28432== 
+==28432== HEAP SUMMARY:
+==28432==     in use at exit: 0 bytes in 0 blocks
+==28432==   total heap usage: 586 allocs, 586 frees, 16,742 bytes allocated
+==28432== 
+==28432== All heap blocks were freed -- no leaks are possible
+==28432== 
+==28432== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

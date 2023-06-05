@@ -15,9 +15,38 @@ struct record_db{
     RecordsCategory category;
 };
 
-/* Implement copy, match, compare print and destroy
- * 
- */
+///////////////////////////////////////////////////////////////////////////////
+
+RecordsResult track_result_to_record_result(TracksResult res){
+    switch (res) {
+        case TRK_SUCCESS:
+            return RDB_SUCCESS;
+        case TRK_NULL_ARGUMENT:
+            return RDB_NULL_ARGUMENT;
+        case TRK_RECORD_DOESNT_EXIST:
+            return RDB_RECORD_DOESNT_EXIST;
+        case TRK_INVALID_YEAR:
+            return RDB_INVALID_YEAR;
+        case TRK_INVALID_CATEGORY:
+            return RDB_INVALID_CATEGORY;
+        case TRK_RECORD_ALREADY_EXISTS:
+            return RDB_RECORD_ALREADY_EXISTS;
+        case TRK_NO_RECORDS:
+            return RDB_NO_RECORDS;
+        case TRK_INVALID_TRACK_LENGTH:
+            return RDB_INVALID_TRACK_LENGTH;
+        case TRK_TRACK_ALREADY_EXISTS:
+            return RDB_TRACK_ALREADY_EXISTS;
+        case TRK_NO_TRACKS:
+            return RDB_NO_TRACKS;
+        case TRK_TRACK_DOESNT_EXIST:
+            return RDB_TRACK_DOESNT_EXIST;
+        case TRK_OUT_OF_MEMORY:
+            return RDB_OUT_OF_MEMORY;
+        default:
+            return RDB_NULL_ARGUMENT;
+    }
+}
 
 int recordCompareRecordsByName(Record record1, Record record2){
     
@@ -133,7 +162,10 @@ void recordDbDestroy(Record record){
 }
 
 RecordsResult recordDbAddTrackToRecord(Record record, char *trackName, int trackLength){
-    RecordsResult res = tracksDbAddTrack(record->tracks,trackName,trackLength);
+
+    TracksResult track_res = tracksDbAddTrack(record->tracks,trackName,trackLength);
+
+    RecordsResult res = track_result_to_record_result(track_res);
     if(res == RDB_SUCCESS) 
         record->num_of_tracks_added++;
 
@@ -141,9 +173,13 @@ RecordsResult recordDbAddTrackToRecord(Record record, char *trackName, int track
 }
 
 RecordsResult recordDbRemoveTrackFromRecord(Record record, char *trackName){
-    RecordsResult res = tracksDbRemoveTrack(record->tracks,trackName);
+    
+    TracksResult track_res = tracksDbRemoveTrack(record->tracks,trackName);
+
+    RecordsResult res = track_result_to_record_result(track_res);
     if(res == RDB_SUCCESS) 
         record->num_of_tracks_added--;
 
     return res;
 }
+

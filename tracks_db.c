@@ -88,71 +88,71 @@ void tracksDbDestroy(TracksDB tracks_db){
     free(tracks_db);
 }
 
-RecordsResult tracksDbAddTrack(TracksDB tracks_db, char *track_name, int track_length){
+TracksResult tracksDbAddTrack(TracksDB tracks_db, char *track_name, int track_length){
 
     if(tracks_db == NULL || track_name == NULL){
-        return RDB_NULL_ARGUMENT;
+        return TRK_NULL_ARGUMENT;
     }
 
-    if(track_length <= 0) return RDB_INVALID_TRACK_LENGTH;
+    if(track_length <= 0) return TRK_INVALID_TRACK_LENGTH;
     
     Track track = trackDbCreate(track_name, track_length);
 
     if(linkedListFind(tracks_db->list,track_name,matchTrackByName) == LIST_SUCCESS){
         trackDbDestroy(track);
-        return RDB_TRACK_ALREADY_EXISTS;
+        return TRK_TRACK_ALREADY_EXISTS;
     }
 
     if(linkedListInsertLast(tracks_db->list, track) != LIST_SUCCESS){
         trackDbDestroy(track);
-        return RDB_OUT_OF_MEMORY;
+        return TRK_OUT_OF_MEMORY;
     }
 
     trackDbDestroy(track);
     
     tracks_db->num_of_tracks++;
 
-    return RDB_SUCCESS;
+    return TRK_SUCCESS;
 }
 
-RecordsResult tracksDbRemoveTrack(TracksDB tracks_db, char *track_name){
+TracksResult tracksDbRemoveTrack(TracksDB tracks_db, char *track_name){
     
     if(tracks_db == NULL){
-        return RDB_NULL_ARGUMENT;
+        return TRK_NULL_ARGUMENT;
     }
     linkedListGoToHead(tracks_db->list);
    
     if(linkedListFind(tracks_db->list, track_name, matchTrackByName) == LIST_SUCCESS){
         if(linkedListRemoveCurrent(tracks_db->list) != LIST_SUCCESS){
-            return RDB_NULL_ARGUMENT;
+            return TRK_NULL_ARGUMENT;
         }
     } else {
-        return RDB_TRACK_DOESNT_EXIST;
+        return TRK_TRACK_DOESNT_EXIST;
     }
 
     tracks_db->num_of_tracks--;
 
-    return RDB_SUCCESS;
+    return TRK_SUCCESS;
 }
 
-RecordsResult tracksDbReportTracks(TracksDB tracks_db, FILE *out){
+TracksResult tracksDbReportTracks(TracksDB tracks_db, FILE *out){
 
-    if(tracks_db == NULL) return RDB_NULL_ARGUMENT;
+    if(tracks_db == NULL) return TRK_NULL_ARGUMENT;
 
-    if(tracks_db->num_of_tracks == 0) return RDB_NO_TRACKS;
+    if(tracks_db->num_of_tracks == 0) return TRK_NO_TRACKS;
    
     if(linkedListPrint(tracks_db->list ,out ,tracks_db->num_of_tracks) != LIST_SUCCESS){
-        return RDB_NULL_ARGUMENT;
+        return TRK_NULL_ARGUMENT;
     }
 
-    return RDB_SUCCESS;
+    return TRK_SUCCESS;
 }
 
 int findTrackInRecord(TracksDB tracks_db, char *track_name){
     
-    if(tracks_db == NULL) return RDB_NULL_ARGUMENT;
+    if(tracks_db == NULL) return TRK_NULL_ARGUMENT;
 
-    if(tracks_db->num_of_tracks == 0) return RDB_NO_TRACKS;
+    if(tracks_db->num_of_tracks == 0) return TRK_NO_TRACKS;
 
     linkedListGoToHead(tracks_db->list);
 
